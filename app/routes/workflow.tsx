@@ -1,7 +1,7 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import type { NavigationItem } from "~/common/navigation";
 import type { User } from "~/common/user";
-import type { ShouldReloadFunction } from "@remix-run/react";
+import { ShouldReloadFunction, useCatch } from "@remix-run/react";
 
 import { json } from "@remix-run/node";
 import stylesUrl from "~/styles/users.css";
@@ -10,8 +10,14 @@ import { getUser } from "~/api/user";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { Sidebar } from "~/components/sidebar";
 import { useState } from "react";
-import { FullContainer, Content, InnerContent } from "~/components/container";
+import {
+  FullContainer,
+  Content,
+  InnerContent,
+  Center,
+} from "~/components/container";
 import SidebarToggle from "~/components/sidebar/sidebar-toggle";
+import { ErrorMessage } from "~/components/error";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
@@ -36,6 +42,14 @@ export const loader: LoaderFunction = async () => {
 
 // WARNING!!!!
 export const unstable_shouldReload: ShouldReloadFunction = () => false;
+
+export function ErrorBoundary() {
+  return (
+    <Center>
+      <ErrorMessage>Error</ErrorMessage>
+    </Center>
+  );
+}
 
 export default function Workflow() {
   const { user, navigation, secondaryNavigation } =
